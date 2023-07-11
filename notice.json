@@ -1,0 +1,12 @@
+{
+  // Technologies used to build this app
+  /*
+  AutoMapper 8.1.0 a tool for mapping DTO (Data Transfer Object) objects.
+  Newtonsoft 5.0.1 a library for serializing and deserializing objects.
+  EntityFrameworkCore & EntityFrameworkCore.SqlServer 5.0.1  libraries for managing databases from the .NET level.
+  EntityFrameworkCore.Tools 5.0.1 a tool for creating migrations.
+  NLog 4.10.10 a library for creating logs in applications.
+  SwashBuckle 5.6.3 to a library for sharing API methods.
+  Twilio 6.6.0 a library for sending SMS messages.
+  */
+}

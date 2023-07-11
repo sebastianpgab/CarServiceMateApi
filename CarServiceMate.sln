@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33214.272
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarServiceMate", "CarServiceMate.csproj", "{2EC4ADA2-3FFC-4396-80B4-683161F632CF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2EC4ADA2-3FFC-4396-80B4-683161F632CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EC4ADA2-3FFC-4396-80B4-683161F632CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EC4ADA2-3FFC-4396-80B4-683161F632CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EC4ADA2-3FFC-4396-80B4-683161F632CF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B607F1FA-E58A-45A1-A6EA-81CE80849C9D}
+	EndGlobalSection
+EndGlobal
