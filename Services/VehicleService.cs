@@ -23,7 +23,7 @@ namespace CarServiceMate.Services
         public int Update(int id, string marke, string model, int? year, ClaimsPrincipal user);
         public Client FindClient(int id);
         public Task<Vehicle> SearchVin(string searchedVin);
-
+        public Task<IEnumerable<Vehicle>> SearchName(string name);
 
     }
     public class VehicleService : IVehicleService
@@ -135,6 +135,29 @@ namespace CarServiceMate.Services
             return foundVehicle;
 
          }
+
+        public async Task <IEnumerable<Vehicle>> SearchName(string name)
+        {
+            string[] parts = name.Split(' ');
+            string firstname = parts[0].Trim().ToLower();
+            string lastname = parts.Length > 1 ? parts[1].Trim().ToLower() : null;
+            List<Vehicle> vehicles = new List<Vehicle>();
+
+            var clients = _dbContext.Clients.Where(p => p.FirstName == firstname && p.LastName == lastname);
+
+            if (await clients.AnyAsync())
+            {
+                var clientsId = await clients.Select(p => p.Id).ToListAsync();
+
+                foreach (var id in clientsId)
+                {
+                    var vehicle = _dbContext.Vehicles.Where(c => c.ClientId == id);
+                    vehicles.AddRange(vehicle);
+                }
+                return vehicles;
+            }
+            return vehicles;
+        }
 
     }
 }

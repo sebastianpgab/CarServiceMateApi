@@ -68,12 +68,20 @@ namespace CarServiceMate.Controllers
             var foundVehicle = await _vehicleService.SearchVin(searchedVin);
             if(foundVehicle is not null)
             {
-                return Ok(foundVehicle);
+               return Ok(foundVehicle);
             }
             return NotFound();
         }
 
-
-
+        [HttpGet("searchedClient")]
+        public async Task<ActionResult> SearchClient([FromQuery] string name)
+        {
+            var vehicles = await _vehicleService.SearchName(name);
+            if(vehicles is not null)
+            {
+               return Ok(vehicles);
+            }
+            return NotFound();
+        }
     }
 }
