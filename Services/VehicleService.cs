@@ -20,7 +20,7 @@ namespace CarServiceMate.Services
         public VehicleDto GetById(int id);
         public int CreateVehicle(VehicleDto vehicleDto, int clientId);
         public int Delete(int id, ClaimsPrincipal user);
-        public int Update(int id, string marke, string model, int? year, ClaimsPrincipal user);
+        public VehicleDto Update(int id, VehicleDto vehicle, ClaimsPrincipal user);
         public Client FindClient(int id);
         public Task<Vehicle> SearchVin(string searchedVin);
         public Task<IEnumerable<Vehicle>> SearchName(string name);
@@ -97,27 +97,37 @@ namespace CarServiceMate.Services
 
          }
 
-         public int Update(int id, string marke, string model, int? year, ClaimsPrincipal user)
+         public VehicleDto Update(int id, VehicleDto vehicleDto, ClaimsPrincipal user)
          {
              var vehicle = _dbContext.Vehicles.FirstOrDefault(p => p.Id == id);
              if(vehicle is not null)
              {
+                /* AUTORYZACJA ODPOWIEDZIALNA ZA EDYCJE JESLI SIĘ POWIEDZIE LOGOWANIE TO ZEZWOLI NA UPDATE DANYCH (NA RAZIE OFF)
                  var authorizationResult = _authorizationService.AuthorizeAsync(user, vehicle, new ResourceOperationRequirement(ResourceOperation.Update)).Result;
 
                  if (!authorizationResult.Succeeded)
                  {
                      throw new ForbidException();
                  }
+                */
 
-                 vehicle.Make = marke is not null && marke.Length <= 25 ? marke : vehicle.Make;
-                 vehicle.Model = model is not null && model.Length <= 25  ? model : vehicle.Model;
-                 vehicle.Year = year is not null && year.ToString().Length == 4 ? year : vehicle.Year;
-                 _dbContext.SaveChanges();
-                 return id;
+                 vehicle.Make = vehicleDto.Make is not null && vehicleDto.Make.Length <= 25 ? vehicleDto.Make : vehicle.Make;
+                 vehicle.Model = vehicleDto.Model is not null && vehicleDto.Model.Length <= 25  ? vehicleDto.Model : vehicle.Model;
+                 vehicle.VIN = vehicleDto.VIN is not null && vehicleDto.VIN.Length <= 17 ? vehicleDto.VIN : vehicle.Model;
+                 vehicle.Year = vehicleDto.Year != 0 && vehicleDto.Year.ToString().Length == 4 ? vehicleDto.Year : vehicle.Year;
+                 vehicle.Engine = vehicleDto.Engine is not null && vehicleDto.Engine.Length <= 4 ? vehicleDto.Engine : vehicle.Model;
+                 vehicle.Kilometers = vehicleDto.Kilometers != 0 ? vehicleDto.Kilometers : vehicle.Kilometers;
+                 vehicle.Status = vehicleDto.Status is not null ? vehicleDto.Status : vehicle.Status;
+
+                 var vehicleMaped = _autoMapper.Map<VehicleDto>(vehicle);
+
+                _dbContext.SaveChanges();
+                 return vehicleMaped;
              }
              throw new NotFoundException("Vehicle not found");
          }
 
+        //zastanowić się czy ta metoda nie powinna być w ClientService
          public Client FindClient(int clientId)
          {
              var client = _dbContext.Clients.FirstOrDefault(p => p.Id == clientId);

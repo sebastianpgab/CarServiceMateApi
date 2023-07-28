@@ -58,5 +58,12 @@ namespace CarServiceMate.Controllers
             return Ok();
         }
 
+        [HttpGet("vehicle/{id}")]
+        public ActionResult GetClientByVehicleId([FromRoute] int id)
+        {
+            var client = _clientService.GetClientByVehicleId(id);
+            return Ok(client);
+        }
+
     }
 }

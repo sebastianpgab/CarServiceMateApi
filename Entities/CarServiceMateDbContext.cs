@@ -20,7 +20,7 @@ namespace CarServiceMate.Entities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Client>().Property(r => r.Address).HasMaxLength(50);
+            modelBuilder.Entity<Vehicle>().Property(p => p.Status).HasDefaultValue("Czeka na naprawę");
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

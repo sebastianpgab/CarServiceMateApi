@@ -19,6 +19,7 @@ namespace CarServiceMate.Models
         public int Year { get; set; }
         public string Engine { get; set; }
         public int Kilometers { get; set; }
+        public string Status { get; set; }
         public int? ClientId { get; set; }
 
     }

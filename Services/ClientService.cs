@@ -16,6 +16,7 @@ namespace CarServiceMate.Services
         public int Delete(int id);
         public bool Update(int id, ClientDto client);
         public void Add(ClientDto clientDto);
+        public Client GetClientByVehicleId(int id);
 
     }
     public class ClientService : IClientService
@@ -84,6 +85,12 @@ namespace CarServiceMate.Services
             var clinet = _mapper.Map<Client>(clientDto);
             _dbContext.Clients.Add(clinet);
             _dbContext.SaveChanges();
+        }
+
+        public Client GetClientByVehicleId(int id)
+        {
+            var client = _dbContext.Vehicles.Where(c => id == c.Id).Select(v => v.Client).FirstOrDefault();
+            return client;
         }
     }
 }

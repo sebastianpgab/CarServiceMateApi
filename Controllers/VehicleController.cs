@@ -26,17 +26,17 @@ namespace CarServiceMate.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult Update([FromRoute] int id, [FromQuery] string marke, [FromQuery] string model, [FromQuery] int? year)
+        public ActionResult Update([FromRoute] int id, [FromBody] VehicleDto vehicle)
         {
-           var idVehcile = _vehicleService.Update(id, marke, model, year, User);
-            return Ok($"Vehicle {id} has been updated");
+           var vehicledMaped = _vehicleService.Update(id, vehicle, User);
+            return Ok(vehicledMaped);
         }
 
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {
             var idVehicle = _vehicleService.Delete(id, User);
-            return Ok($"Vehcile {id} has been deleted");
+            return Ok(idVehicle);
         }
 
         [HttpGet]

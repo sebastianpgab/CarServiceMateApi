@@ -19,11 +19,14 @@ namespace CarServiceMate.Controllers
             _smsService = smsService;
         }
 
-        [HttpPost]
-        public ActionResult SendSms([FromBody] SmsRequest smsRequest)
+        [HttpGet("{idVehicle}")]
+        public ActionResult SendSms([FromRoute]int idVehicle)
         {
-            var sms = _smsService.SendSms(smsRequest);
+            var sms = _smsService.SendSms(idVehicle);
             return Ok(sms);
         }
+
+
+        
     }
 }
