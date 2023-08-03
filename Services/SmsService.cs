@@ -21,34 +21,47 @@ namespace CarServiceMate.Services
         private readonly IClientService _clientService;
         private readonly IVehicleService _vehicleService;
         private readonly ILogger<SmsService> _logger;
+        private readonly IRepairService _repairService;
 
         public SmsService(CarServiceMateDbContext dbContext, SmsLogic smsLogic, ILogger<SmsService> logger,
-            IClientService clientService, IVehicleService vehicleService)
+            IClientService clientService, IVehicleService vehicleService, IRepairService repairService)
         {
             _dbContext = dbContext;
             _smsLogic = smsLogic;
             _logger = logger;
             _clientService = clientService;
             _vehicleService = vehicleService;
+            _repairService = repairService;
         }
 
         public async Task<SmsRequest> SendSms(int vehicleId)
         {
             var client = _clientService.GetClientByVehicleId(vehicleId);
             var vehicle = _vehicleService.GetById(vehicleId);
+            var repair = _repairService.GetRepairByVehicleId(vehicle.Id);
 
             if (client is not null)
             {
                 var smsRequest = new SmsRequest
                 {
-                    Message = $"{client.FirstName}, Twój pojazd jest na etapie {vehicle.Status}",
+                    Message = $"{client.FirstName}, Twój pojazd jest na etapie: {vehicle.Status}. " +
+                    $"Opis wykonywanych prac: {repair.Description}",
                     RecipientPhoneNumber = client.PhoneNumber
                 };
 
                 _dbContext.SmsRequests.Add(smsRequest);
                 await _dbContext.SaveChangesAsync();
 
-                await _smsLogic.SendSmsAsync(smsRequest.RecipientPhoneNumber, smsRequest.Message);
+                try
+                {
+                    await _smsLogic.SendSmsAsync(smsRequest.RecipientPhoneNumber, smsRequest.Message);
+                }
+                catch (Exception ex)
+                {
+                    //loguj lub przetwarzaj zgłoszony wyjątek tutaj
+                    //problem jest z autentykacja twilio
+                    Console.WriteLine(ex);
+                }
                 return smsRequest;
             }
             throw new NullReferenceException("Client is null");

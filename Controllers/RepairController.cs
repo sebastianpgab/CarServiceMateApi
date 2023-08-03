@@ -20,16 +20,30 @@ namespace CarServiceMate.Controllers
             _reapairService = reapairService;
         }
         [HttpPost]
-        public ActionResult<Repair> CreateRepair([FromBody] RepairDto repairDto)
+        public ActionResult<Repair> CreateRepair([FromRoute] int vehicleId, [FromBody] RepairDto repairDto)
         {
-            var repair = _reapairService.CreateRepair(repairDto);
+            var repair = _reapairService.CreateRepair(vehicleId, repairDto);
             return Ok(repair);
         }
         [HttpGet]
-        public ActionResult<RepairDto> GetAll()
+        public ActionResult<RepairDto> GetAll([FromRoute] int vehicleId)
         {
-           var repair = _reapairService.GetAll();
-            return Ok(repair);
+            var repairs = _reapairService.GetAll(vehicleId);
+            return Ok(repairs);
+        }
+
+        [HttpGet("{repairId}")]
+        public ActionResult<RepairDto> GetRepair([FromRoute] int repairId)
+        {
+            var reapir = _reapairService.GetRepair(repairId);
+            return Ok(reapir);
+        }
+
+        [HttpPut("{repairId}")]
+        public ActionResult<RepairDto> Update([FromRoute] int repairId, [FromBody] Repair updatedRepiar)
+        {
+            var reapir = _reapairService.Update(repairId, updatedRepiar);
+            return Ok(reapir);
         }
     }
 }
