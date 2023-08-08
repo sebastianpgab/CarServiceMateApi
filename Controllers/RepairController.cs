@@ -20,10 +20,10 @@ namespace CarServiceMate.Controllers
             _reapairService = reapairService;
         }
         [HttpPost]
-        public ActionResult<Repair> CreateRepair([FromRoute] int vehicleId, [FromBody] RepairDto repairDto)
+        public ActionResult CreateRepair([FromBody] Repair newRepair)
         {
-            var repair = _reapairService.CreateRepair(vehicleId, repairDto);
-            return Ok(repair);
+            var repair = _reapairService.CreateRepair(newRepair);
+            return Ok();
         }
         [HttpGet]
         public ActionResult<RepairDto> GetAll([FromRoute] int vehicleId)
@@ -44,6 +44,13 @@ namespace CarServiceMate.Controllers
         {
             var reapir = _reapairService.Update(repairId, updatedRepiar);
             return Ok(reapir);
+        }
+
+        [HttpGet("search-by-date")]
+        public ActionResult<IEnumerable<Repair>> SearchRepairByDate([FromQuery] int id,[FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        {
+            var repairs = _reapairService.SearchRepairByDate(id, startDate, endDate);
+            return Ok(repairs);
         }
     }
 }

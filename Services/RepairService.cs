@@ -14,8 +14,10 @@ namespace CarServiceMate.Services
         public IEnumerable<RepairDto> GetAll(int vehicleId);
         public RepairDto Update(int id, Repair updatedRepiar);
         public RepairDto GetRepair(int id);
-        public Repair CreateRepair(int vehicleId, RepairDto repairDto);
+        public Repair CreateRepair(Repair repairDto);
         public Repair GetRepairByVehicleId(int id);
+        public IEnumerable<Repair> SearchRepairByDate(int id, DateTime startDate, DateTime endDate);
+
     }
     public class RepairService : IRepairService
     {
@@ -34,10 +36,8 @@ namespace CarServiceMate.Services
             return reapirsDto;
         }
 
-        public Repair CreateRepair(int vehicleId, RepairDto repairDto)
+        public Repair CreateRepair(Repair repair)
         {
-            var repair = _mapper.Map<Repair>(repairDto);
-            repair.VehicleId = vehicleId;
             _dbContext.Repairs.Add(repair);
             _dbContext.SaveChanges();
             return repair;
@@ -67,6 +67,21 @@ namespace CarServiceMate.Services
 
             var repairDto = _mapper.Map<RepairDto>(repair);
             return repairDto;
+        }
+        public IEnumerable<Repair> SearchRepairByDate(int id, DateTime startDate, DateTime endDate)
+        {
+            //tu przesłać odpowiednie id pojazdu
+            var repairs = _dbContext.Repairs.Where(p => p.VehicleId == id);
+            var newRepairs = new List<Repair>();
+            foreach(var repair in repairs)
+            {
+                if(startDate < repair.RepairDate && endDate > repair.RepairDate)
+                {
+                    newRepairs.Add(repair);
+                }
+            }
+            return newRepairs;
+
         }
 
     }
