@@ -17,6 +17,8 @@ namespace CarServiceMate.Services
         public bool Update(int id, ClientDto client);
         public void Add(ClientDto clientDto);
         public Client GetClientByVehicleId(int id);
+        public IEnumerable<Client> searchByFullName(string name);
+        public IEnumerable<Client> searchByPhoneNumber(string phoneNumber);
 
     }
     public class ClientService : IClientService
@@ -31,7 +33,7 @@ namespace CarServiceMate.Services
         public IEnumerable<ClientDto> GetAll()
         {
             var clients = _dbContext.Clients.ToList();
-            if(clients is not null)
+            if (clients is not null)
             {
                 var clientsDto = _mapper.Map<IEnumerable<ClientDto>>(clients);
                 return clientsDto;
@@ -42,7 +44,7 @@ namespace CarServiceMate.Services
         public ClientDto GetById(int id)
         {
             var client = _dbContext.Clients.FirstOrDefault(p => p.Id == id);
-            if(client is not null)
+            if (client is not null)
             {
                 var clientDto = _mapper.Map<ClientDto>(client);
                 return clientDto;
@@ -67,7 +69,7 @@ namespace CarServiceMate.Services
         public bool Update(int id, ClientDto clientDto)
         {
             var client = _dbContext.Clients.FirstOrDefault(p => p.Id == id);
-            if(client is not null)
+            if (client is not null)
             {
                 client.FirstName = clientDto.FirstName is not null ? clientDto.FirstName : client.FirstName;
                 client.LastName = clientDto.LastName is not null ? clientDto.LastName : client.LastName;
@@ -81,7 +83,7 @@ namespace CarServiceMate.Services
         }
 
         public void Add(ClientDto clientDto)
-       {
+        {
             var clinet = _mapper.Map<Client>(clientDto);
             _dbContext.Clients.Add(clinet);
             _dbContext.SaveChanges();
@@ -91,6 +93,29 @@ namespace CarServiceMate.Services
         {
             var client = _dbContext.Vehicles.Where(c => id == c.Id).Select(v => v.Client).FirstOrDefault();
             return client;
+        }
+
+        public IEnumerable<Client> searchByFullName(string name)
+        {
+            var cleanedName = name.Trim().ToLower();
+            var nameSegments = cleanedName.Split(' ', 2);
+
+            var clients = _dbContext.Clients.Where(p => p.FirstName.ToLower() == nameSegments[0] && p.LastName.ToLower() == nameSegments[1]);
+            if (clients.Any())
+            {
+                return clients;
+            }
+            throw new NotFoundException("Client not Found");
+        }
+
+        public IEnumerable<Client> searchByPhoneNumber(string phoneNumber)
+        {
+            var client = _dbContext.Clients.Where(p => p.PhoneNumber == phoneNumber);
+            if (client.Any())
+            {
+                return client;
+            }
+            throw new NotFoundException("Client not Found");
         }
     }
 }

@@ -45,7 +45,7 @@ namespace CarServiceMate.Controllers
             return Ok();
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public ActionResult Update([FromRoute] int id, [FromBody] ClientDto clientDto)
         {
             _clientService.Update(id, clientDto);
@@ -62,6 +62,20 @@ namespace CarServiceMate.Controllers
         public ActionResult GetClientByVehicleId([FromRoute] int id)
         {
             var client = _clientService.GetClientByVehicleId(id);
+            return Ok(client);
+        }
+
+        [HttpGet("fullname/{fullName}")]
+        public ActionResult GetByFullName([FromRoute] string fullName)
+        {
+            var clients = _clientService.searchByFullName(fullName);
+            return Ok(clients);
+        }
+
+        [HttpGet("phonenumber/{phoneNumber}")]
+        public ActionResult GetByPhoneNumber([FromRoute] string phoneNumber)
+        {
+            var client = _clientService.searchByPhoneNumber(phoneNumber);
             return Ok(client);
         }
 
