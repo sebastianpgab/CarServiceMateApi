@@ -17,6 +17,8 @@ namespace CarServiceMate.Services
         public Repair CreateRepair(Repair repairDto);
         public Repair GetRepairByVehicleId(int id);
         public IEnumerable<Repair> SearchRepairByDate(int id, DateTime startDate, DateTime endDate);
+        public IEnumerable<Repair> GetAllVehiclesRepairedByMonth();
+
 
     }
     public class RepairService : IRepairService
@@ -70,7 +72,6 @@ namespace CarServiceMate.Services
         }
         public IEnumerable<Repair> SearchRepairByDate(int id, DateTime startDate, DateTime endDate)
         {
-            //tu przesłać odpowiednie id pojazdu
             var repairs = _dbContext.Repairs.Where(p => p.VehicleId == id);
             var newRepairs = new List<Repair>();
             foreach(var repair in repairs)
@@ -81,7 +82,14 @@ namespace CarServiceMate.Services
                 }
             }
             return newRepairs;
+        }
 
+        public IEnumerable<Repair> GetAllVehiclesRepairedByMonth()
+        {
+            var currentDate = DateTime.Today;
+            var dateOfLastMonth = currentDate.AddMonths(-1);
+            var vehiclesRepaired = _dbContext.Repairs.Where(p => p.RepairDate > dateOfLastMonth);
+            return vehiclesRepaired;
         }
 
     }

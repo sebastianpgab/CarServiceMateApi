@@ -52,5 +52,14 @@ namespace CarServiceMate.Controllers
             var repairs = _reapairService.SearchRepairByDate(id, startDate, endDate);
             return Ok(repairs);
         }
+
+        // "~" override main route controller
+        [Route("~/api/vehicle/repair/all-repaired-by-month")]
+        [HttpGet]
+        public ActionResult<IEnumerable<Repair>> GetAllVehiclesRepairedByMonth()
+        {
+            var vehiclesRepaired = _reapairService.GetAllVehiclesRepairedByMonth();
+            return Ok(vehiclesRepaired);
+        }
     }
 }

@@ -46,10 +46,10 @@ namespace CarServiceMate.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult Update([FromRoute] int id, [FromBody] ClientDto clientDto)
+        public ActionResult<bool> Update([FromRoute] int id, [FromBody] ClientDto clientDto)
         {
-            _clientService.Update(id, clientDto);
-            return Ok();
+            var isUpdated = _clientService.Update(id, clientDto);
+            return Ok(isUpdated);
         }
         [HttpPost]
         public ActionResult Add([FromBody] ClientDto clientDto)
@@ -78,6 +78,7 @@ namespace CarServiceMate.Controllers
             var client = _clientService.searchByPhoneNumber(phoneNumber);
             return Ok(client);
         }
+
 
     }
 }

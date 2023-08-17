@@ -19,7 +19,6 @@ namespace CarServiceMate.Services
         public Client GetClientByVehicleId(int id);
         public IEnumerable<Client> searchByFullName(string name);
         public IEnumerable<Client> searchByPhoneNumber(string phoneNumber);
-
     }
     public class ClientService : IClientService
     {
