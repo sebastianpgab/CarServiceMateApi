@@ -12,7 +12,7 @@ namespace CarServiceMate.Services
 {
     public interface ISmsService
     {
-        public Task<SmsRequest> SendSms(int vehicleId);
+        public Task<SmsRequest> SendSms(int vehicleId);    
     }
     public class SmsService : ISmsService
     {

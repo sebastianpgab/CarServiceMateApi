@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CarServiceMate.Controllers
 {
-    [Route("api/sms")]
+    [Route("api/send")]
     [ApiController]
     public class SmsController : Controller
     {
@@ -19,14 +19,11 @@ namespace CarServiceMate.Controllers
             _smsService = smsService;
         }
 
-        [HttpGet("{idVehicle}")]
-        public ActionResult SendSms([FromRoute]int idVehicle)
+        [HttpPost("sms")]
+        public ActionResult SendSms([FromBody]int idVehicle)
         {
             var sms = _smsService.SendSms(idVehicle);
             return Ok(sms);
         }
-
-
-        
     }
 }

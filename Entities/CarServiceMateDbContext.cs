@@ -13,6 +13,7 @@ namespace CarServiceMate.Entities
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Repair> Repairs { get; set; }
+        public DbSet<MailRequest> MailRequests { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<SmsRequest> SmsRequests { get; set; }
         public DbSet<Role> Roles { get; set; }

@@ -6,6 +6,7 @@ using CarServiceMate.Middleware;
 using CarServiceMate.Models;
 using CarServiceMate.Models.Validators;
 using CarServiceMate.Services;
+using CarServiceMate.Settings;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
@@ -70,6 +71,7 @@ namespace CarServiceMate
             services.AddScoped<IRepairService, RepairService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ISmsService, SmsService>();
+            services.AddScoped<IMailService, MailService>();
             services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
             services.AddScoped<ErrorHandlingMiddleware>();
             services.AddScoped<RequestTimeMiddleware>();
@@ -86,6 +88,8 @@ namespace CarServiceMate
                                       .AllowAnyHeader());
             });
             services.AddSingleton(x => new SmsLogic(Configuration["Twilio:AccountSid"], Configuration["Twilio:AuthToken"], Configuration["Twilio:PhoneNumber"]));
+            services.Configure<MailgunSettings>(Configuration.GetSection("Mailgun"));
+            services.AddSingleton<MailLogic>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
