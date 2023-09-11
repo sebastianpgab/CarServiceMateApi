@@ -18,6 +18,8 @@ namespace CarServiceMate.Entities
         public DbSet<SmsRequest> SmsRequests { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Company> Companies { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

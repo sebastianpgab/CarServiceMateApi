@@ -9,9 +9,9 @@ namespace CarServiceMate.Entities
     public class MailRequest
     {
         public int Id { get; set; }
-        [EmailAddress]
-        public string Sender { get; set; } = "sebastianpgab@gmail.com";
         public string Subject { get; set; }
         public string Message { get; set; }
+        public int IdCompany { get; set; }
+
     }
 }

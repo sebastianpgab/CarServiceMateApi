@@ -4,14 +4,16 @@ using CarServiceMate.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CarServiceMate.Migrations
 {
     [DbContext(typeof(CarServiceMateDbContext))]
-    partial class CarServiceMateDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230823214238_delete-validation-email")]
+    partial class deletevalidationemail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,9 +37,6 @@ namespace CarServiceMate.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IdCompany")
-                        .HasColumnType("int");
-
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
@@ -49,42 +48,12 @@ namespace CarServiceMate.Migrations
                     b.ToTable("Clients");
                 });
 
-            modelBuilder.Entity("CarServiceMate.Entities.Company", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NIP")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("hasSubscription")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Companies");
-                });
-
             modelBuilder.Entity("CarServiceMate.Entities.MailRequest", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
-
-                    b.Property<int>("IdCompany")
-                        .HasColumnType("int");
 
                     b.Property<string>("Message")
                         .HasColumnType("nvarchar(max)");
@@ -107,9 +76,6 @@ namespace CarServiceMate.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IdCompany")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("NotificationDate")
                         .HasColumnType("datetime2");
 
@@ -124,9 +90,6 @@ namespace CarServiceMate.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
-
-                    b.Property<int>("IdCompany")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
@@ -154,9 +117,6 @@ namespace CarServiceMate.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("IdCompany")
-                        .HasColumnType("int");
 
                     b.Property<int?>("NotificationId")
                         .HasColumnType("int");
@@ -208,9 +168,6 @@ namespace CarServiceMate.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int>("IdCompany")
-                        .HasColumnType("int");
-
                     b.Property<string>("Message")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -238,9 +195,6 @@ namespace CarServiceMate.Migrations
 
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("IdCompany")
-                        .HasColumnType("int");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
@@ -276,9 +230,6 @@ namespace CarServiceMate.Migrations
 
                     b.Property<string>("Engine")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("IdCompany")
-                        .HasColumnType("int");
 
                     b.Property<int>("Kilometers")
                         .HasColumnType("int");

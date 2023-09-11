@@ -13,5 +13,7 @@ namespace CarServiceMate.Entities
         public string RecipientPhoneNumber { get; set; }
         [Required]
         public string Message { get; set; }
+        public int IdCompany { get; set; }
+
     }
 }

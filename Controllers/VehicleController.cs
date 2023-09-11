@@ -2,6 +2,7 @@
 using CarServiceMate.Entities;
 using CarServiceMate.Models;
 using CarServiceMate.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -42,30 +43,29 @@ namespace CarServiceMate.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<VehicleDto>> GetAll()
         {
-            var vehicles = _vehicleService.GetAll();
+            var vehicles = _vehicleService.GetAll(User);
             return Ok(vehicles);
         }
 
         [HttpGet("{id}")]
         public ActionResult<VehicleDto> Get([FromRoute] int id)
         {
-            var vehicle = _vehicleService.GetById(id);
+            var vehicle = _vehicleService.GetById(id, User);
             return Ok(vehicle);
         }
 
         [HttpPost("{clientId}")] 
         public ActionResult CreateVehicle([FromBody] VehicleDto vehicleDto, [FromRoute] int clientId)
         {
-            //var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
-            var client = _vehicleService.FindClient(clientId);
-            var id = _vehicleService.CreateVehicle(vehicleDto, client.Id);
+            var client = _vehicleService.FindClient(clientId, User);
+            var id = _vehicleService.CreateVehicle(vehicleDto, client.Id, User);
             return Created($"/api/vehicle/{id}", null);
         }
         
         [HttpGet("vin/{searchedVin}")]
         public async Task<ActionResult> SearchVin([FromRoute] string searchedVin)
         {
-            var foundVehicle = await _vehicleService.SearchVin(searchedVin);
+            var foundVehicle = await _vehicleService.SearchVin(searchedVin, User);
             if(foundVehicle is not null)
             {
                return Ok(foundVehicle);
@@ -76,7 +76,7 @@ namespace CarServiceMate.Controllers
         [HttpGet("searchedClient")]
         public async Task<ActionResult> SearchClient([FromQuery] string name)
         {
-            var vehicles = await _vehicleService.SearchName(name);
+            var vehicles = await _vehicleService.SearchName(name, User);
             if(vehicles is not null)
             {
                return Ok(vehicles);

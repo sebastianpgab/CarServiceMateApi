@@ -22,7 +22,7 @@ namespace CarServiceMate.Controllers
         [HttpPost("sms")]
         public ActionResult SendSms([FromBody]int idVehicle)
         {
-            var sms = _smsService.SendSms(idVehicle);
+            var sms = _smsService.SendSms(idVehicle, User);
             return Ok(sms);
         }
     }

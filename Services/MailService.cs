@@ -8,7 +8,7 @@ namespace CarServiceMate.Services
 {
     public interface IMailService
     {
-        public Task<bool> SendMail(MailRequest mailRequest);
+        public Task<MailRequest> SendMail(MailRequest mailRequest);
     }
     public class MailService : IMailService
     {
@@ -20,17 +20,20 @@ namespace CarServiceMate.Services
             _mailLogic = mailLogic;
         }
 
-        public async Task<bool> SendMail(MailRequest mailRequest)
+
+        public async Task<MailRequest> SendMail(MailRequest mailRequest)
         {
-            await _mailLogic.SendEmailAsync(mailRequest.Sender, mailRequest.Subject, mailRequest.Message);
+            var recipients = _dbContext.Clients.Select(p => p.Email).ToList();
+
+            await _mailLogic.SendEmailAsync(recipients, mailRequest.Subject, mailRequest.Message);
 
             if(mailRequest is not null)
             {
                 _dbContext.Add(mailRequest);
                 _dbContext.SaveChanges();
-                return true;
+                return mailRequest;
             }
-            return false;
+            return mailRequest;
 
         }
     }

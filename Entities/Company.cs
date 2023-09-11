@@ -5,15 +5,13 @@ using System.Threading.Tasks;
 
 namespace CarServiceMate.Entities
 {
-    public class Client
+    public class Company
     {
         public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string Name { get; set; }
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
-        public string Email { get; set; }
-        public virtual List<Vehicle> Vehicles { get; set; }
-        public int IdCompany { get; set; }
+        public string NIP { get; set; }
+        public bool hasSubscription { get; set; }
     }
 }

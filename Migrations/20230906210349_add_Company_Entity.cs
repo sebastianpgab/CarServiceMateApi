@@ -2,30 +2,32 @@
 
 namespace CarServiceMate.Migrations
 {
-    public partial class addMailRequestentity : Migration
+    public partial class add_Company_Entity : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "MailRequests",
+                name: "Companies",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Sender = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Subject = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Message = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NIP = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    hasSubscription = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MailRequests", x => x.Id);
+                    table.PrimaryKey("PK_Companies", x => x.Id);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "MailRequests");
+                name: "Companies");
         }
     }
 }

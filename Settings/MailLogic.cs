@@ -19,27 +19,30 @@
             _maligunSettings = maligunSettings.Value;
         }
 
-        public async Task SendEmailAsync(string recipient, string subject, string message)
+        public async Task SendEmailAsync(List<string> recipients, string subject, string message)
         {
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes($"api:{_maligunSettings.ApiKey}")));
 
-                var formData = new Dictionary<string, string>
-            {
-                { "from", "CarMate Info <sebastianpgab@gmail.com>" },
-                { "to", recipient },
-                { "subject", subject },
-                { "text", message }
-            };
-
-                var response = await client.PostAsync($"https://api.mailgun.net/v3/{_maligunSettings.Domain}/messages", new FormUrlEncodedContent(formData));
-                var responseContent = await response.Content.ReadAsStringAsync();
-
-                if (!response.IsSuccessStatusCode)
+                foreach (var recipient in recipients)
                 {
-                    // Handle the error or throw an exception
-                    throw new Exception($"Failed to send email: {responseContent}");
+                    var formData = new Dictionary<string, string>
+                    {
+                        { "from", "CarMate Info <sebastianpgab@gmail.com>" },
+                        { "to", recipient },
+                        { "subject", subject },
+                        { "text", message }
+                    };
+
+                    var response = await client.PostAsync($"https://api.mailgun.net/v3/{_maligunSettings.Domain}/messages", new FormUrlEncodedContent(formData));
+                    var responseContent = await response.Content.ReadAsStringAsync();
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        // Handle the error or throw an exception
+                        throw new Exception($"Failed to send email: {responseContent}");
+                    }
                 }
             }
         }

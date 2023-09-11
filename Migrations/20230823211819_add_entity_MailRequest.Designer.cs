@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarServiceMate.Migrations
 {
     [DbContext(typeof(CarServiceMateDbContext))]
-    [Migration("20230821210842_add-MailRequest-entity")]
-    partial class addMailRequestentity
+    [Migration("20230823211819_add_entity_MailRequest")]
+    partial class add_entity_MailRequest
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -56,9 +56,6 @@ namespace CarServiceMate.Migrations
                         .UseIdentityColumn();
 
                     b.Property<string>("Message")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Sender")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Subject")

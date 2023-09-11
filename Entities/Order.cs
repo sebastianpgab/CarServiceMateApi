@@ -12,5 +12,7 @@ namespace CarServiceMate.Entities
         public decimal TotalCost { get; set; }
         public string Status { get; set; }
         public virtual Repair Repair { get; set; }
+        public int IdCompany { get; set; }
+
     }
 }

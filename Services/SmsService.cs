@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace CarServiceMate.Services
 {
     public interface ISmsService
     {
-        public Task<SmsRequest> SendSms(int vehicleId);    
+        public Task<SmsRequest> SendSms(int vehicleId, ClaimsPrincipal user);    
     }
     public class SmsService : ISmsService
     {
@@ -34,10 +35,10 @@ namespace CarServiceMate.Services
             _repairService = repairService;
         }
 
-        public async Task<SmsRequest> SendSms(int vehicleId)
+        public async Task<SmsRequest> SendSms(int vehicleId, ClaimsPrincipal user)
         {
             var client = _clientService.GetClientByVehicleId(vehicleId);
-            var vehicle = _vehicleService.GetById(vehicleId);
+            var vehicle = _vehicleService.GetById(vehicleId, user);
             var repair = _repairService.GetRepairByVehicleId(vehicle.Id);
 
             if (client is not null)

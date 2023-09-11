@@ -18,5 +18,7 @@ namespace CarServiceMate.Entities
         public string Status { get; set; }
         public virtual Client Client { get; set; }
         public virtual List<Repair> Repairs { get; set; }
+        public int IdCompany { get; set; }
+
     }
 }

@@ -70,6 +70,7 @@ namespace CarServiceMate.Services
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
                 new Claim(ClaimTypes.Role, $"{user.Role.Name}"),
+                new Claim("CompanyId", user.IdCompany.ToString())
             };
 
             //create private key based on database from appsettings.json
@@ -84,8 +85,6 @@ namespace CarServiceMate.Services
                 signingCredentials: cred);
             var tokenHandler = new JwtSecurityTokenHandler();
             return tokenHandler.WriteToken(token);
-
-           
         }
 
 
