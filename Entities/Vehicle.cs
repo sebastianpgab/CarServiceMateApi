@@ -15,7 +15,7 @@ namespace CarServiceMate.Entities
         public int? CreatedById { get; set; }
         public virtual User CreatedBy { get; set; }
         public int? ClientId { get; set; }
-        public string Status { get; set; }
+        public string Status { get; set; } = "Czeka na naprawę";
         public virtual Client Client { get; set; }
         public virtual List<Repair> Repairs { get; set; }
         public int IdCompany { get; set; }
