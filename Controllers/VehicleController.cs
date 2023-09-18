@@ -29,43 +29,43 @@ namespace CarServiceMate.Controllers
         [HttpPut("{id}")]
         public ActionResult Update([FromRoute] int id, [FromBody] VehicleDto vehicle)
         {
-           var vehicledMaped = _vehicleService.Update(id, vehicle, User);
+           var vehicledMaped = _vehicleService.Update(id, vehicle);
             return Ok(vehicledMaped);
         }
 
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {
-            var idVehicle = _vehicleService.Delete(id, User);
+            var idVehicle = _vehicleService.Delete(id);
             return Ok(idVehicle);
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<VehicleDto>> GetAll()
         {
-            var vehicles = _vehicleService.GetAll(User);
+            var vehicles = _vehicleService.GetAll();
             return Ok(vehicles);
         }
 
         [HttpGet("{id}")]
         public ActionResult<VehicleDto> Get([FromRoute] int id)
         {
-            var vehicle = _vehicleService.GetById(id, User);
+            var vehicle = _vehicleService.GetById(id);
             return Ok(vehicle);
         }
 
         [HttpPost("{clientId}")] 
         public ActionResult CreateVehicle([FromBody] VehicleDto vehicleDto, [FromRoute] int clientId)
         {
-            var client = _vehicleService.FindClient(clientId, User);
-            var id = _vehicleService.CreateVehicle(vehicleDto, client.Id, User);
+            var client = _vehicleService.FindClient(clientId);
+            var id = _vehicleService.CreateVehicle(vehicleDto, client.Id);
             return Created($"/api/vehicle/{id}", null);
         }
         
         [HttpGet("vin/{searchedVin}")]
         public async Task<ActionResult> SearchVin([FromRoute] string searchedVin)
         {
-            var foundVehicle = await _vehicleService.SearchVin(searchedVin, User);
+            var foundVehicle = await _vehicleService.SearchVin(searchedVin);
             if(foundVehicle is not null)
             {
                return Ok(foundVehicle);
@@ -76,7 +76,7 @@ namespace CarServiceMate.Controllers
         [HttpGet("searchedClient")]
         public async Task<ActionResult> SearchClient([FromQuery] string name)
         {
-            var vehicles = await _vehicleService.SearchName(name, User);
+            var vehicles = await _vehicleService.SearchName(name);
             if(vehicles is not null)
             {
                return Ok(vehicles);

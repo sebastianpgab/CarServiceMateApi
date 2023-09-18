@@ -13,7 +13,7 @@ namespace CarServiceMate.Services
 {
     public interface ISmsService
     {
-        public Task<SmsRequest> SendSms(int vehicleId, ClaimsPrincipal user);    
+        public Task<SmsRequest> SendSms(int vehicleId);    
     }
     public class SmsService : ISmsService
     {
@@ -23,6 +23,7 @@ namespace CarServiceMate.Services
         private readonly IVehicleService _vehicleService;
         private readonly ILogger<SmsService> _logger;
         private readonly IRepairService _repairService;
+
 
         public SmsService(CarServiceMateDbContext dbContext, SmsLogic smsLogic, ILogger<SmsService> logger,
             IClientService clientService, IVehicleService vehicleService, IRepairService repairService)
@@ -35,10 +36,10 @@ namespace CarServiceMate.Services
             _repairService = repairService;
         }
 
-        public async Task<SmsRequest> SendSms(int vehicleId, ClaimsPrincipal user)
+        public async Task<SmsRequest> SendSms(int vehicleId)
         {
             var client = _clientService.GetClientByVehicleId(vehicleId);
-            var vehicle = _vehicleService.GetById(vehicleId, user);
+            var vehicle = _vehicleService.GetById(vehicleId);
             var repair = _repairService.GetRepairByVehicleId(vehicle.Id);
 
             if (client is not null)

@@ -17,14 +17,14 @@ namespace CarServiceMate.Services
 {
     public interface IVehicleService
     {
-        public IEnumerable<VehicleDto> GetAll(ClaimsPrincipal user);
-        public VehicleDto GetById(int id, ClaimsPrincipal user);
-        public int CreateVehicle(VehicleDto vehicleDto, int clientId, ClaimsPrincipal user);
-        public int Delete(int id, ClaimsPrincipal user);
-        public VehicleDto Update(int id, VehicleDto vehicle, ClaimsPrincipal user);
-        public Client FindClient(int id, ClaimsPrincipal user);
-        public Task<Vehicle> SearchVin(string searchedVin, ClaimsPrincipal user);
-        public Task<IEnumerable<Vehicle>> SearchName(string name, ClaimsPrincipal use);
+        public IEnumerable<VehicleDto> GetAll();
+        public VehicleDto GetById(int id);
+        public int CreateVehicle(VehicleDto vehicleDto, int clientId);
+        public int Delete(int id);
+        public VehicleDto Update(int id, VehicleDto vehicle);
+        public Client FindClient(int id);
+        public Task<Vehicle> SearchVin(string searchedVin);
+        public Task<IEnumerable<Vehicle>> SearchName(string name);
 
     }
     public class VehicleService : IVehicleService
@@ -34,23 +34,23 @@ namespace CarServiceMate.Services
          private readonly ILogger<VehicleService> _logger;
          private readonly IAuthorizationService _authorizationService;
          private readonly IHttpContextAccessor _httpContextAccessor;
+         private readonly UserClaimsService _userClaimsService;
 
 
         public VehicleService(IMapper autoMapper, CarServiceMateDbContext dbContext, ILogger<VehicleService> logger,
-             IAuthorizationService authorizationService, IHttpContextAccessor httpContextAccessor)
+             IAuthorizationService authorizationService, IHttpContextAccessor httpContextAccessor, UserClaimsService userClaimsService)
          {
              _httpContextAccessor = httpContextAccessor;
              _autoMapper = autoMapper;
              _dbContext = dbContext;
              _logger = logger;
              _authorizationService = authorizationService;
+            _userClaimsService = userClaimsService;
          }
 
-        public IEnumerable<VehicleDto> GetAll(ClaimsPrincipal user)
+        public IEnumerable<VehicleDto> GetAll()
         {
-            var companyId = UserClaimsService.GetCompanyId(user);
-
-            var vehicles = _dbContext.Vehicles.Where(v => v.IdCompany == companyId).ToList();
+            var vehicles = _dbContext.Vehicles.Where(v => v.IdCompany == _userClaimsService.companyId).ToList();
 
             if (vehicles is not null && vehicles.Any())
             {
@@ -60,11 +60,9 @@ namespace CarServiceMate.Services
             throw new NotFoundException("Vehicles not found");
         }
 
-        public VehicleDto GetById(int id, ClaimsPrincipal user)
+        public VehicleDto GetById(int id)
          {
-            var companyId = UserClaimsService.GetCompanyId(user);
-
-            var vehicle = _dbContext.Vehicles.FirstOrDefault(p => p.Id == id && p.IdCompany == companyId);
+            var vehicle = _dbContext.Vehicles.FirstOrDefault(p => p.Id == id && p.IdCompany == _userClaimsService.companyId);
              if(vehicle is not null)
              {
                  var vehicleDto = _autoMapper.Map<VehicleDto>(vehicle);
@@ -73,15 +71,13 @@ namespace CarServiceMate.Services
              throw new NotFoundException("Vehicle not found");
          }
 
-         public int CreateVehicle(VehicleDto vehicleDto, int clientId, ClaimsPrincipal user)
+         public int CreateVehicle(VehicleDto vehicleDto, int clientId)
          {
-            var companyId = UserClaimsService.GetCompanyId(user);
-
             if (vehicleDto is not null)
              {
                  var vehicle = _autoMapper.Map<Vehicle>(vehicleDto);
                  vehicle.ClientId = clientId;
-                 vehicle.IdCompany = companyId;
+                 vehicle.IdCompany = _userClaimsService.companyId;
                  _dbContext.Vehicles.Add(vehicle);
                  _dbContext.SaveChanges();
                  return vehicle.Id;
@@ -89,13 +85,13 @@ namespace CarServiceMate.Services
              throw new NotFoundException("Vehicle not found");
          }
 
-         public int Delete(int id, ClaimsPrincipal user)
+         public int Delete(int id)
          {
              _logger.LogWarning($"Vehicle with id: {id} DELETE action invoked");
-             var vehicle = _dbContext.Vehicles.FirstOrDefault(p => p.Id == id);
+             var vehicle = _dbContext.Vehicles.FirstOrDefault(p => p.Id == id && p.IdCompany == _userClaimsService.companyId);
              if(vehicle is not null)
              {
-                 var authorizationResult = _authorizationService.AuthorizeAsync(user, vehicle, new ResourceOperationRequirement(ResourceOperation.Delete)).Result;
+                 var authorizationResult = _authorizationService.AuthorizeAsync(_userClaimsService.User, vehicle, new ResourceOperationRequirement(ResourceOperation.Delete)).Result;
 
                  if (!authorizationResult.Succeeded)
                  {
@@ -108,9 +104,9 @@ namespace CarServiceMate.Services
              throw new NotFoundException("Vehicle not found");
          }
 
-         public VehicleDto Update(int id, VehicleDto vehicleDto, ClaimsPrincipal user)
+         public VehicleDto Update(int id, VehicleDto vehicleDto)
          {
-             var vehicle = _dbContext.Vehicles.FirstOrDefault(p => p.Id == id);
+             var vehicle = _dbContext.Vehicles.FirstOrDefault(p => p.Id == id && p.IdCompany == _userClaimsService.companyId);
              if(vehicle is not null)
              {
                  vehicle.Make = vehicleDto.Make is not null && vehicleDto.Make.Length <= 25 ? vehicleDto.Make : vehicle.Make;
@@ -129,11 +125,9 @@ namespace CarServiceMate.Services
              throw new NotFoundException("Vehicle not found");
          }
 
-         public Client FindClient(int clientId, ClaimsPrincipal user)
+         public Client FindClient(int clientId)
          {
-            var companyId = UserClaimsService.GetCompanyId(user);
-
-            var client = _dbContext.Clients.FirstOrDefault(p => p.Id == clientId && p.IdCompany == companyId);
+            var client = _dbContext.Clients.FirstOrDefault(p => p.Id == clientId && p.IdCompany == _userClaimsService.companyId);
 
              if (client is not null)
              {
@@ -142,22 +136,20 @@ namespace CarServiceMate.Services
              throw new NotFoundException("Client does not exsit");
          }
 
-         public async Task<Vehicle> SearchVin(string searchedVin, ClaimsPrincipal user)
+         public async Task<Vehicle> SearchVin(string searchedVin)
          {
-            var companyId = UserClaimsService.GetCompanyId(user);
-            var foundVehicle = await _dbContext.Vehicles.FirstOrDefaultAsync(p => p.VIN == searchedVin && p.IdCompany == companyId);
+            var foundVehicle = await _dbContext.Vehicles.FirstOrDefaultAsync(p => p.VIN == searchedVin && p.IdCompany == _userClaimsService.companyId);
             return foundVehicle;
          }
 
-        public async Task <IEnumerable<Vehicle>> SearchName(string name, ClaimsPrincipal user)
+        public async Task <IEnumerable<Vehicle>> SearchName(string name)
         {
-            var companyId = UserClaimsService.GetCompanyId(user);
             string[] parts = name.Split(' ');
             string firstname = parts[0].Trim().ToLower();
             string lastname = parts.Length > 1 ? parts[1].Trim().ToLower() : null;
             List<Vehicle> vehicles = new List<Vehicle>();
 
-            var clients = _dbContext.Clients.Where(p => p.FirstName == firstname && p.LastName == lastname && p.IdCompany == companyId);
+            var clients = _dbContext.Clients.Where(p => p.FirstName == firstname && p.LastName == lastname && p.IdCompany == _userClaimsService.companyId);
 
             if (await clients.AnyAsync())
             {
@@ -172,6 +164,5 @@ namespace CarServiceMate.Services
             }
             return vehicles;
         }
-
     }
 }

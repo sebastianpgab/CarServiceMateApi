@@ -75,6 +75,7 @@ namespace CarServiceMate
             services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
             services.AddScoped<ErrorHandlingMiddleware>();
             services.AddScoped<RequestTimeMiddleware>();
+            services.AddScoped<UserClaimsService>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddControllersWithViews()
             .AddNewtonsoftJson(options =>
