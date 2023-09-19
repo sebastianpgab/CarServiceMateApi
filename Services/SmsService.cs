@@ -24,7 +24,6 @@ namespace CarServiceMate.Services
         private readonly ILogger<SmsService> _logger;
         private readonly IRepairService _repairService;
 
-
         public SmsService(CarServiceMateDbContext dbContext, SmsLogic smsLogic, ILogger<SmsService> logger,
             IClientService clientService, IVehicleService vehicleService, IRepairService repairService)
         {

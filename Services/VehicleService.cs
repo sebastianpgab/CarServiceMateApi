@@ -87,16 +87,9 @@ namespace CarServiceMate.Services
 
          public int Delete(int id)
          {
-             _logger.LogWarning($"Vehicle with id: {id} DELETE action invoked");
              var vehicle = _dbContext.Vehicles.FirstOrDefault(p => p.Id == id && p.IdCompany == _userClaimsService.companyId);
              if(vehicle is not null)
              {
-                 var authorizationResult = _authorizationService.AuthorizeAsync(_userClaimsService.User, vehicle, new ResourceOperationRequirement(ResourceOperation.Delete)).Result;
-
-                 if (!authorizationResult.Succeeded)
-                 {
-                     throw new ForbidException();
-                 }
                  _dbContext.Vehicles.Remove(vehicle);
                  _dbContext.SaveChanges();
                  return id;

@@ -24,14 +24,17 @@ namespace CarServiceMate.Services
     {
         private readonly CarServiceMateDbContext _dbContext;
         private readonly IMapper _mapper;
-        public ClientService(CarServiceMateDbContext dbContext, IMapper mapper)
+        private readonly UserClaimsService _userClaimsService;
+        public ClientService(CarServiceMateDbContext dbContext, IMapper mapper, UserClaimsService userClaimsService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _userClaimsService = userClaimsService;
         }
         public IEnumerable<ClientDto> GetAll()
         {
-            var clients = _dbContext.Clients.ToList();
+
+            var clients = _dbContext.Clients.Where(p => p.IdCompany == _userClaimsService.companyId).ToList();
             if (clients is not null)
             {
                 var clientsDto = _mapper.Map<IEnumerable<ClientDto>>(clients);
@@ -42,7 +45,7 @@ namespace CarServiceMate.Services
 
         public ClientDto GetById(int id)
         {
-            var client = _dbContext.Clients.FirstOrDefault(p => p.Id == id);
+            var client = _dbContext.Clients.FirstOrDefault(p => p.Id == id && p.IdCompany == _userClaimsService.companyId);
             if (client is not null)
             {
                 var clientDto = _mapper.Map<ClientDto>(client);
@@ -53,8 +56,8 @@ namespace CarServiceMate.Services
 
         public int Delete(int id)
         {
-            var client = _dbContext.Clients.FirstOrDefault(p => p.Id == id);
-            var vehicles = _dbContext.Vehicles.Where(p => p.ClientId == id);
+            var client = _dbContext.Clients.FirstOrDefault(p => p.Id == id && p.IdCompany == _userClaimsService.companyId);
+            var vehicles = _dbContext.Vehicles.Where(p => p.ClientId == id && p.IdCompany == _userClaimsService.companyId);
             if (client is not null)
             {
                 _dbContext.Vehicles.RemoveRange(vehicles);
@@ -67,7 +70,7 @@ namespace CarServiceMate.Services
 
         public bool Update(int id, ClientDto clientDto)
         {
-            var client = _dbContext.Clients.FirstOrDefault(p => p.Id == id);
+            var client = _dbContext.Clients.FirstOrDefault(p => p.Id == id && p.IdCompany == _userClaimsService.companyId);
             if (client is not null)
             {
                 client.FirstName = clientDto.FirstName is not null ? clientDto.FirstName : client.FirstName;
@@ -83,14 +86,19 @@ namespace CarServiceMate.Services
 
         public void Add(ClientDto clientDto)
         {
-            var clinet = _mapper.Map<Client>(clientDto);
-            _dbContext.Clients.Add(clinet);
-            _dbContext.SaveChanges();
+            if( clientDto is not null) {
+
+                var clinet = _mapper.Map<Client>(clientDto);
+                clinet.IdCompany = _userClaimsService.companyId;
+                _dbContext.Clients.Add(clinet);
+                _dbContext.SaveChanges();
+            }
+
         }
 
         public Client GetClientByVehicleId(int id)
         {
-            var client = _dbContext.Vehicles.Where(c => id == c.Id).Select(v => v.Client).FirstOrDefault();
+            var client = _dbContext.Vehicles.Where(c => id == c.Id && c.IdCompany == _userClaimsService.companyId).Select(v => v.Client).FirstOrDefault();
             return client;
         }
 
@@ -99,7 +107,7 @@ namespace CarServiceMate.Services
             var cleanedName = name.Trim().ToLower();
             var nameSegments = cleanedName.Split(' ', 2);
 
-            var clients = _dbContext.Clients.Where(p => p.FirstName.ToLower() == nameSegments[0] && p.LastName.ToLower() == nameSegments[1]);
+            var clients = _dbContext.Clients.Where(p => p.FirstName.ToLower() == nameSegments[0] && p.LastName.ToLower() == nameSegments[1] && p.IdCompany == _userClaimsService.companyId);
             if (clients.Any())
             {
                 return clients;
@@ -109,7 +117,7 @@ namespace CarServiceMate.Services
 
         public IEnumerable<Client> searchByPhoneNumber(string phoneNumber)
         {
-            var client = _dbContext.Clients.Where(p => p.PhoneNumber == phoneNumber);
+            var client = _dbContext.Clients.Where(p => p.PhoneNumber == phoneNumber && p.IdCompany == _userClaimsService.companyId);
             if (client.Any())
             {
                 return client;

@@ -51,7 +51,7 @@ namespace CarServiceMate.Controllers
             var isUpdated = _clientService.Update(id, clientDto);
             return Ok(isUpdated);
         }
-        [HttpPost]
+        [HttpPost("add")]
         public ActionResult Add([FromBody] ClientDto clientDto)
         {
             _clientService.Add(clientDto);
