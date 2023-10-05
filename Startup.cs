@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -61,7 +62,7 @@ namespace CarServiceMate
             });
 
             services.AddRazorPages();
-            services.AddDbContext<CarServiceMateDbContext>();
+            //services.AddDbContext<CarServiceMateDbContext>();
             services.AddScoped<IAuthorizationHandler, ResourceOperationRequirementHandler>();
             services.AddControllers().AddFluentValidation();
             services.AddScoped<CarServiceMateSeeder>();
@@ -91,6 +92,8 @@ namespace CarServiceMate
             services.AddSingleton(x => new SmsLogic(Configuration["Twilio:AccountSid"], Configuration["Twilio:AuthToken"], Configuration["Twilio:PhoneNumber"]));
             services.Configure<MailgunSettings>(Configuration.GetSection("Mailgun"));
             services.AddSingleton<MailLogic>();
+            services.AddDbContext<CarServiceMateDbContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("CarMateDbConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

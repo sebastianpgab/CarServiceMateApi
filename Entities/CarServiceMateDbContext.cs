@@ -8,7 +8,12 @@ namespace CarServiceMate.Entities
 {
     public class CarServiceMateDbContext : DbContext
     {
-        private string _connectionString = "Server=SEBASTIANPGAB\\SQLEXPRESS; Database=CarServiceMateDb; Trusted_Connection=True";
+        //private string _connectionString = "Server=SEBASTIANPGAB\\SQLEXPRESS; Database=CarServiceMateDb; Trusted_Connection=True";
+        public CarServiceMateDbContext(DbContextOptions<CarServiceMateDbContext> options) : base(options)
+        {
+
+        }
+
         public DbSet<Client> Clients { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Order> Orders { get; set; }
@@ -24,10 +29,6 @@ namespace CarServiceMate.Entities
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Vehicle>().Property(p => p.Status).HasDefaultValue("Czeka na naprawę");
-        }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(_connectionString);
         }
     }
 }
