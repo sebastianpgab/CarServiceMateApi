@@ -78,7 +78,5 @@ namespace CarServiceMate.Controllers
             var client = _clientService.searchByPhoneNumber(phoneNumber);
             return Ok(client);
         }
-
-
     }
 }

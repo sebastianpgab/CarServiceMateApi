@@ -94,26 +94,7 @@ namespace CarServiceMate
                     }
                     };
                     _dbContext.Vehicles.AddRange(vehicles);
-                    _dbContext.SaveChanges();
-
-                    //Seed Orders
-                    var orders = new List<Order>
-                    {
-                    new Order
-                    {
-                        OrderDate = DateTime.Now,
-                        TotalCost = 100.00m,
-                        Status = "Completed",
-                    },
-                    new Order
-                    {
-                        OrderDate = DateTime.Now,
-                        TotalCost = 250.00m,
-                        Status = "In Progress",
-                    }
-                    };
-                    _dbContext.Orders.AddRange(orders);
-                    _dbContext.SaveChanges();
+                    _dbContext.SaveChanges();    
 
                     //Seed Repairs
                     var repairs = new List<Repair>

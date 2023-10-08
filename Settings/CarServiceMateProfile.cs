@@ -15,7 +15,6 @@ namespace CarServiceMate
             CreateMap<Vehicle, VehicleDto>();
             CreateMap<VehicleDto, Vehicle>();
             CreateMap<Client, ClientDto>();
-            CreateMap<Order, OrderDto>();
             CreateMap<Repair, RepairDto>();
             CreateMap<RepairDto, Repair>();
             CreateMap<ClientDto, Client>(); 
