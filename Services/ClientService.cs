@@ -35,7 +35,7 @@ namespace CarServiceMate.Services
         {
 
             var clients = _dbContext.Clients.Where(p => p.IdCompany == _userClaimsService.companyId).ToList();
-            if (clients is not null)
+            if (clients.Any())
             {
                 var clientsDto = _mapper.Map<IEnumerable<ClientDto>>(clients);
                 return clientsDto;
