@@ -12,8 +12,6 @@ namespace CarServiceMate.Entities
         public virtual Vehicle Vehicle { get; set; }
         public int? OrderId { get; set; }
         public virtual Order Order { get; set; }
-        public int? NotificationId { get; set; }
-        public virtual Notification Notification { get; set; }
         public int IdCompany { get; set; }
 
     }

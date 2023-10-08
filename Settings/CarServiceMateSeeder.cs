@@ -96,24 +96,6 @@ namespace CarServiceMate
                     _dbContext.Vehicles.AddRange(vehicles);
                     _dbContext.SaveChanges();
 
-                    //Seed Notification
-                    var notifications = new List<Notification>
-                {
-                    new Notification
-                    {
-                        NotificationDate = new DateTime(2004-03-10),
-                        Description = "Notka do samochodu 1"
-                    },
-
-                    new Notification
-                    {
-                        NotificationDate = new DateTime(2005-02-11),
-                        Description = "Notka do samochodu 2"
-                    }
-                    };
-                    _dbContext.Notifications.AddRange(notifications);
-                    _dbContext.SaveChanges();
-
                     //Seed Orders
                     var orders = new List<Order>
                     {
@@ -143,7 +125,6 @@ namespace CarServiceMate
                         Cost = 50.00m,
                         VehicleId = 1,
                         OrderId = 1,
-                        NotificationId = 1
                     },
                     new Repair
                     {
@@ -152,7 +133,6 @@ namespace CarServiceMate
                         Cost = 200.00m,
                         VehicleId = 2,
                         OrderId = 2,
-                        NotificationId = 2
                     }
                     };
                     _dbContext.Repairs.AddRange(repairs);

@@ -15,7 +15,6 @@ namespace CarServiceMate.Entities
         }
 
         public DbSet<Client> Clients { get; set; }
-        public DbSet<Notification> Notifications { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Repair> Repairs { get; set; }
         public DbSet<MailRequest> MailRequests { get; set; }

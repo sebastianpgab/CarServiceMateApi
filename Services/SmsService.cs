@@ -59,8 +59,6 @@ namespace CarServiceMate.Services
                 }
                 catch (Exception ex)
                 {
-                    //loguj lub przetwarzaj zgłoszony wyjątek tutaj
-                    //problem jest z autentykacja twilio
                     Console.WriteLine(ex);
                 }
                 return smsRequest;
