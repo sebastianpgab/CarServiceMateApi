@@ -8,7 +8,6 @@ namespace CarServiceMate.Entities
 {
     public class CarServiceMateDbContext : DbContext
     {
-        //private string _connectionString = "Server=SEBASTIANPGAB\\SQLEXPRESS; Database=CarServiceMateDb; Trusted_Connection=True";
         public CarServiceMateDbContext(DbContextOptions<CarServiceMateDbContext> options) : base(options)
         {
 
