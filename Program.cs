@@ -99,7 +99,9 @@ var app = builder.Build();
 var scope = app.Services.CreateScope();
 var seeder = scope.ServiceProvider.GetRequiredService<CarServiceMateSeeder>();
 
+EnsureDatabaseUpdated(app);
 seeder.Seed();
+
 
 if (app.Environment.IsDevelopment())
 {
@@ -133,3 +135,12 @@ app.UseEndpoints(endpoints =>
 });
 
 app.Run();
+
+static void EnsureDatabaseUpdated(WebApplication app)
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<CarServiceMateDbContext>();
+        db.Database.Migrate();
+    }
+}

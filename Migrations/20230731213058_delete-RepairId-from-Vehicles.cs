@@ -6,18 +6,18 @@ namespace CarServiceMate.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
+           /* migrationBuilder.DropColumn(
                 name: "RepairId",
-                table: "Vehicles");
+                table: "Vehicles");*/
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
+           /*migrationBuilder.AddColumn<int>(
                 name: "RepairId",
                 table: "Vehicles",
                 type: "int",
-                nullable: true);
+                nullable: true);*/
         }
     }
 }
