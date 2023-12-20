@@ -99,7 +99,7 @@ var app = builder.Build();
 var scope = app.Services.CreateScope();
 var seeder = scope.ServiceProvider.GetRequiredService<CarServiceMateSeeder>();
 
-EnsureDatabaseUpdated(app);
+//EnsureDatabaseUpdated(app);
 seeder.Seed();
 
 
