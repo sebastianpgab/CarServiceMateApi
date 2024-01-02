@@ -29,5 +29,13 @@ namespace CarServiceMate.Controllers
             string token = _accountService.GenerateJwt(dto);
             return Ok(token);
         }
+
+
+        [HttpGet("checkApi")]
+        public ActionResult CheckApi()
+        {
+            Console.WriteLine("Api works");
+            return Ok("Api works");
+        }
     }
 }
