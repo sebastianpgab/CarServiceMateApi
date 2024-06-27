@@ -11,6 +11,8 @@ CarServiceMateApi is an API built using the ASP.NET Core framework with .NET 6. 
 - Manage clients, repairs, and cars
 - Organize workshop operations efficiently
 - Send SMS and email notifications for repairs and promotions
+- User login and registration with JWT
+- Assign user permissions
 
 ## Libraries Used
 
