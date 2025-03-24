@@ -29,7 +29,7 @@
                 {
                     var formData = new Dictionary<string, string>
                     {
-                        { "from", "CarMate Info <sebastianpgab@gmail.com>" },
+                        { "from", "CarMate Info <postmaster@sandboxf5277ab396e5442682eded2fbddf3453.mailgun.org>" },
                         { "to", recipient },
                         { "subject", subject },
                         { "text", message }
