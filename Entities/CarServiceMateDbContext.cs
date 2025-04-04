@@ -42,7 +42,31 @@ namespace CarServiceMate.Entities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Vehicle>().Property(p => p.Status).HasDefaultValue("Czeka na naprawę");
+            // Domyślna wartość statusu dla pojazdu
+            modelBuilder.Entity<Vehicle>()
+                .Property(p => p.Status)
+                .HasDefaultValue("Czeka na naprawę");
+
+            // Relacja: Company 1:N Users
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Company)
+                .WithMany(c => c.Users)
+                .HasForeignKey(u => u.IdCompany)
+                .OnDelete(DeleteBehavior.Restrict); 
+
+            // Relacja: Company 1:N MailRequests
+            modelBuilder.Entity<MailRequest>()
+                .HasOne(m => m.Company)
+                .WithMany(c => c.MailRequests)
+                .HasForeignKey(m => m.IdCompany)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Relacja: Company 1:N SmsRequests
+            modelBuilder.Entity<SmsRequest>()
+                .HasOne(s => s.Company)
+                .WithMany(c => c.SmsRequests)
+                .HasForeignKey(s => s.IdCompany)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

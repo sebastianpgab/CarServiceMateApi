@@ -13,7 +13,7 @@ namespace CarServiceMate.Entities
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
-        public virtual List<Vehicle> Vehicles { get; set; }
+        public virtual ICollection<Vehicle> Vehicles { get; set; }
         public int IdCompany { get; set; }
     }
 }

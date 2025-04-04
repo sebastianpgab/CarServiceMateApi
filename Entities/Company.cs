@@ -13,5 +13,9 @@ namespace CarServiceMate.Entities
         public string PhoneNumber { get; set; }
         public string NIP { get; set; }
         public bool hasSubscription { get; set; }
+        public ICollection<User> Users { get; set; }
+
+        public ICollection<MailRequest> MailRequests { get; set; }
+        public ICollection<SmsRequest> SmsRequests { get; set; }
     }
 }

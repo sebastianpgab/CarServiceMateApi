@@ -17,6 +17,7 @@ namespace CarServiceMate.Entities
         public Role Role { get; set; }
         public int RoleId { get; set; }
         public int IdCompany { get; set; }
+        public Company Company { get; set; }
 
     }
 }

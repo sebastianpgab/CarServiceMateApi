@@ -12,6 +12,7 @@ namespace CarServiceMate.Entities
         public string Subject { get; set; }
         public string Message { get; set; }
         public int IdCompany { get; set; }
+        public Company Company { get; set; }
 
     }
 }
