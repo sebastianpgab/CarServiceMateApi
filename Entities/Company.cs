@@ -17,5 +17,7 @@ namespace CarServiceMate.Entities
 
         public ICollection<MailRequest> MailRequests { get; set; }
         public ICollection<SmsRequest> SmsRequests { get; set; }
+        public ICollection<Client> Clients { get; set; }
+
     }
 }

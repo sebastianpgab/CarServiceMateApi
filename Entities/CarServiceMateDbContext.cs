@@ -10,25 +10,7 @@ namespace CarServiceMate.Entities
 {
     public class CarServiceMateDbContext : DbContext
     {
-        public CarServiceMateDbContext(DbContextOptions<CarServiceMateDbContext> options) : base(options)
-        {
-            try
-            {
-
-                var databaseCreator = Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator;
-
-                if (databaseCreator != null)
-                {
-                    if (!databaseCreator.CanConnect()) databaseCreator.Create();
-                    if (!databaseCreator.HasTables()) databaseCreator.CreateTables();
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
-        }
+        public CarServiceMateDbContext(DbContextOptions<CarServiceMateDbContext> options) : base(options){}
 
         public DbSet<Client> Clients { get; set; }
         public DbSet<Repair> Repairs { get; set; }
@@ -52,7 +34,7 @@ namespace CarServiceMate.Entities
                 .HasOne(u => u.Company)
                 .WithMany(c => c.Users)
                 .HasForeignKey(u => u.IdCompany)
-                .OnDelete(DeleteBehavior.Restrict); 
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Relacja: Company 1:N MailRequests
             modelBuilder.Entity<MailRequest>()
@@ -66,6 +48,13 @@ namespace CarServiceMate.Entities
                 .HasOne(s => s.Company)
                 .WithMany(c => c.SmsRequests)
                 .HasForeignKey(s => s.IdCompany)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // 🔧 NOWA Relacja: Company 1:N Clients
+            modelBuilder.Entity<Client>()
+                .HasOne(c => c.Company)
+                .WithMany(co => co.Clients)
+                .HasForeignKey(c => c.IdCompany)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

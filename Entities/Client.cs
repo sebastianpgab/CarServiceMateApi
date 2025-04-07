@@ -15,5 +15,6 @@ namespace CarServiceMate.Entities
         public string Email { get; set; }
         public virtual ICollection<Vehicle> Vehicles { get; set; }
         public int IdCompany { get; set; }
+        public Company Company { get; set; }
     }
 }

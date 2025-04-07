@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+#nullable disable
+
 namespace CarServiceMate.Migrations
 {
     [DbContext(typeof(CarServiceMateDbContext))]
@@ -15,16 +17,18 @@ namespace CarServiceMate.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseIdentityColumns()
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.1");
+                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("CarServiceMate.Entities.Client", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -46,6 +50,8 @@ namespace CarServiceMate.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IdCompany");
+
                     b.ToTable("Clients");
                 });
 
@@ -53,8 +59,9 @@ namespace CarServiceMate.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -80,8 +87,9 @@ namespace CarServiceMate.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("IdCompany")
                         .HasColumnType("int");
@@ -94,6 +102,8 @@ namespace CarServiceMate.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IdCompany");
+
                     b.ToTable("MailRequests");
                 });
 
@@ -101,8 +111,9 @@ namespace CarServiceMate.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<decimal>("Cost")
                         .HasColumnType("decimal(18,2)");
@@ -133,8 +144,9 @@ namespace CarServiceMate.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -149,8 +161,9 @@ namespace CarServiceMate.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("IdCompany")
                         .HasColumnType("int");
@@ -164,6 +177,8 @@ namespace CarServiceMate.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IdCompany");
+
                     b.ToTable("SmsRequests");
                 });
 
@@ -171,8 +186,9 @@ namespace CarServiceMate.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("datetime2");
@@ -200,6 +216,8 @@ namespace CarServiceMate.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IdCompany");
+
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
@@ -209,8 +227,9 @@ namespace CarServiceMate.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int?>("ClientId")
                         .HasColumnType("int");
@@ -253,6 +272,28 @@ namespace CarServiceMate.Migrations
                     b.ToTable("Vehicles");
                 });
 
+            modelBuilder.Entity("CarServiceMate.Entities.Client", b =>
+                {
+                    b.HasOne("CarServiceMate.Entities.Company", "Company")
+                        .WithMany("Clients")
+                        .HasForeignKey("IdCompany")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("CarServiceMate.Entities.MailRequest", b =>
+                {
+                    b.HasOne("CarServiceMate.Entities.Company", "Company")
+                        .WithMany("MailRequests")
+                        .HasForeignKey("IdCompany")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+                });
+
             modelBuilder.Entity("CarServiceMate.Entities.Repair", b =>
                 {
                     b.HasOne("CarServiceMate.Entities.Vehicle", "Vehicle")
@@ -262,13 +303,32 @@ namespace CarServiceMate.Migrations
                     b.Navigation("Vehicle");
                 });
 
+            modelBuilder.Entity("CarServiceMate.Entities.SmsRequest", b =>
+                {
+                    b.HasOne("CarServiceMate.Entities.Company", "Company")
+                        .WithMany("SmsRequests")
+                        .HasForeignKey("IdCompany")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+                });
+
             modelBuilder.Entity("CarServiceMate.Entities.User", b =>
                 {
+                    b.HasOne("CarServiceMate.Entities.Company", "Company")
+                        .WithMany("Users")
+                        .HasForeignKey("IdCompany")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("CarServiceMate.Entities.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Company");
 
                     b.Navigation("Role");
                 });
@@ -291,6 +351,17 @@ namespace CarServiceMate.Migrations
             modelBuilder.Entity("CarServiceMate.Entities.Client", b =>
                 {
                     b.Navigation("Vehicles");
+                });
+
+            modelBuilder.Entity("CarServiceMate.Entities.Company", b =>
+                {
+                    b.Navigation("Clients");
+
+                    b.Navigation("MailRequests");
+
+                    b.Navigation("SmsRequests");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("CarServiceMate.Entities.Vehicle", b =>
