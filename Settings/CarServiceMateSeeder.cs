@@ -45,6 +45,21 @@ namespace CarServiceMate
                 }
                 if (!_dbContext.Clients.Any())
                 {
+                    //Seed Companies
+                    var companies = new List<Company>
+                    {
+                        new Company
+                        {
+                            Name = "MotoCar",
+                            Address = "Piaseczno ul. Dworcowa 3",
+                            PhoneNumber = "798123321",
+                            NIP = "123123123",
+                            hasSubscription = true,
+                        }
+                    };
+                    _dbContext.Companies.AddRange(companies);
+                    _dbContext.SaveChanges();
+
 
                     //Seed Clients
                     var clients = new List<Client>
@@ -55,7 +70,8 @@ namespace CarServiceMate
                         LastName = "Doe",
                         Address = "123 Main St",
                         PhoneNumber = "555-123-4567",
-                        Email = "johndoe@example.com"
+                        Email = "johndoe@example.com",
+                        IdCompany = 1
                     },
                     new Client
                     {
@@ -63,7 +79,8 @@ namespace CarServiceMate
                         LastName = "Doe",
                         Address = "456 High St",
                         PhoneNumber = "555-234-5678",
-                        Email = "janedoe@example.com"
+                        Email = "janedoe@example.com",
+                        IdCompany = 1
                     }
                     };
                     _dbContext.Clients.AddRange(clients);
@@ -80,7 +97,8 @@ namespace CarServiceMate
                         Year = 2010,
                         Engine = "2.5L",
                         Kilometers = 100000,
-                        ClientId = 1
+                        ClientId = 1,
+                        IdCompany = 1
                     },
                     new Vehicle
                     {
@@ -90,7 +108,8 @@ namespace CarServiceMate
                         Year = 2015,
                         Engine = "3.5L",
                         Kilometers = 50000,
-                        ClientId = 2
+                        ClientId = 2,
+                        IdCompany = 1
                     }
                     };
                     _dbContext.Vehicles.AddRange(vehicles);
@@ -106,6 +125,7 @@ namespace CarServiceMate
                         Cost = 50.00m,
                         VehicleId = 1,
                         OrderId = 1,
+                        IdCompany = 1
                     },
                     new Repair
                     {
@@ -114,6 +134,7 @@ namespace CarServiceMate
                         Cost = 200.00m,
                         VehicleId = 2,
                         OrderId = 2,
+                        IdCompany = 1
                     }
                     };
                     _dbContext.Repairs.AddRange(repairs);
